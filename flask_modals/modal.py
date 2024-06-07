@@ -1,7 +1,8 @@
 from functools import wraps
 
 from flask import (Blueprint, render_template, get_flashed_messages,
-                   _app_ctx_stack, request)
+                   request)
+from flask.globals import app_ctx
 from jinja2.utils import markupsafe
 from flask_modals.partial import get_partial
 
@@ -21,7 +22,7 @@ def render_template_modal(*args, **kwargs):
     from `modal` which is the `id` of the modal.
     '''
 
-    ctx = _app_ctx_stack.top
+    ctx = app_ctx
     modal = kwargs.pop('modal', 'modal-form')
 
     if can_stream():
@@ -94,7 +95,7 @@ class Modal:
         displayed and so we do not flash messages in it.
         '''
 
-        ctx = _app_ctx_stack.top
+        ctx = app_ctx
         if not getattr(ctx, '_modal', None):
             return
 
